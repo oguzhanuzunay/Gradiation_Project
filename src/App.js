@@ -2,9 +2,9 @@ import './App.css';
 import React, { useState, useEffect } from 'react';
 import fire from './firebase';
 
-import Navigation from './components/Navitagion/Navigation';
+//import Navigation from './components/Navitagion/Navigation';
 import LoginPage from './components/Navitagion/LoginPage/LoginPage';
-import Hero from './components/Navitagion/MainMenu/Hero';
+import Hero from './components/Navitagion/MainMenu/Hero.jsx';
 
 const App = () => {
   const [user, setUser] = useState('');

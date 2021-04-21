@@ -1,0 +1,22 @@
+import React from 'react';
+import Map from '../../Map/Map';
+import './Hero.css';
+
+const Hero = ({ handleLogOut }) => {
+  return (
+    <section className="hero">
+      <nav>
+        <div className="cont">
+          <h2>Welcome</h2>
+          <button>Map</button>
+        </div>
+        <div className="cont right">
+          <button onClick={handleLogOut}>Logout</button>
+        </div>
+      </nav>
+      <Map/>
+    </section>
+  );
+};
+
+export default Hero;
