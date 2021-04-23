@@ -4,18 +4,22 @@ import './Hero.css';
 
 const Hero = ({ handleLogOut }) => {
   return (
-    <section className="hero">
-      <nav>
-        <div className="cont">
-          <h2>Welcome</h2>
-          <button>Map</button>
-        </div>
-        <div className="cont right">
-          <button onClick={handleLogOut}>Logout</button>
-        </div>
-      </nav>
-      <Map/>
-    </section>
+    <>
+      <section className="hero">
+        <nav>
+          <div className="cont">
+            <h2>Welcome</h2>
+            <button className="purpleButton">Map</button>
+          </div>
+          <div className="cont right">
+            <button className="purpleButton" onClick={handleLogOut}>
+              Logout
+            </button>
+          </div>
+        </nav>
+        <Map />
+      </section>
+    </>
   );
 };
 
