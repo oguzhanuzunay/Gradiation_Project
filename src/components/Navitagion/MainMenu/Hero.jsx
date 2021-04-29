@@ -1,4 +1,5 @@
 import React from 'react';
+import Loading from '../../Loading/Loading.jsx';
 import Map from '../../Map/Map';
 import './Hero.css';
 

@@ -37,24 +37,66 @@ const options = {
   zoomControl: true,
 };
 
+const cordinateList = [
+  {
+    lat: 43.14506241157973,
+    lng: -80.31427730859374,
+    time: new Date(),
+    info: '2 cıkıstaki ısıklara dikkat et',
+  },
+  {
+    lat: 43.321157725277914,
+    lng: -80.75373043359374,
+    time: new Date(),
+    info: '1. cıkıs sıkıntılı biraz',
+  },
+  {
+    lat: 42.92422789558916,
+    lng: -80.96796383203124,
+    time: new Date(),
+    info: 'görkem araba sürüyo dikkat et.',
+  },
+];
+
 const Map = () => {
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+    //googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+    googleMapsApiKey: 'AIzaSyAIvSdAGkHEJ3kkOUJWUfHss2SE3jVxMmI',
     libraries,
   });
 
   const [markers, setMarkers] = React.useState([]);
   const [selected, setSelected] = React.useState(null);
+  const [infoText, setInfoText] = React.useState('');
+
+  // development
+
+  const calculateMiddlePoint = (lat1, lng1, lat2, lng2) => {};
+
+  // setMarkers((current) => [...current, cordinateList]);
+  //console.log(cordinateList);
+  const onDataLoadShowMarker = React.useCallback((list) => {
+    setMarkers((current) => [...current].concat(list));
+  }, []);
+
+  //------------------------
 
   const onMapClick = React.useCallback((event) => {
+    onDataLoadShowMarker(cordinateList);
     setMarkers((current) => [
       ...current,
       {
         lat: event.latLng.lat(),
         lng: event.latLng.lng(),
         time: new Date(),
+        info: 'Zeynep Ehliyet almış \n dikkat et dostum !!!!',
       },
     ]);
+    console.log('markers', markers);
+  }, []);
+
+  const onInfoClick = React.useCallback((event) => {
+    console.log('Info :', infoText);
   }, []);
 
   const mapRef = React.useRef();
@@ -94,6 +136,8 @@ const Map = () => {
               anchor: new window.google.maps.Point(15, 15),
             }}
             onClick={() => {
+              setInfoText(marker.info);
+              console.log(infoText);
               setSelected(marker);
             }}
           />
@@ -108,7 +152,7 @@ const Map = () => {
           >
             <div>
               <h2>Potanciel Crash</h2>
-              <p>Be careful to traffic Light on crossroads</p>
+              <p>{infoText}</p>
             </div>
           </InfoWindow>
         ) : null}
@@ -124,7 +168,10 @@ function Locate({ panTo }) {
       onClick={() => {
         navigator.geolocation.getCurrentPosition(
           (position) => {
-            panTo({lat:position.coords.latitude,lng:position.coords.longitude})
+            panTo({
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            });
           },
           () => null
         );
