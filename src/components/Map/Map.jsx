@@ -1,5 +1,6 @@
 import React from 'react';
 import './Map.css';
+import Loading from '../Loading/Loading.jsx';
 import {
   GoogleMap,
   useLoadScript,
@@ -110,7 +111,7 @@ const Map = () => {
   });
 
   if (loadError) return 'Error loading Maps';
-  if (!isLoaded) return 'Loading Maps';
+  if (!isLoaded) return <Loading />;
 
   return (
     <div>
