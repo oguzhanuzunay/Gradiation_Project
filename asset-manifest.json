@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/Gradiation_Project/static/css/main.23793478.chunk.css",
+    "main.js": "/Gradiation_Project/static/js/main.ac3eb82c.chunk.js",
+    "main.js.map": "/Gradiation_Project/static/js/main.ac3eb82c.chunk.js.map",
+    "runtime-main.js": "/Gradiation_Project/static/js/runtime-main.3c5e76f8.js",
+    "runtime-main.js.map": "/Gradiation_Project/static/js/runtime-main.3c5e76f8.js.map",
+    "static/css/2.5871ad3e.chunk.css": "/Gradiation_Project/static/css/2.5871ad3e.chunk.css",
+    "static/js/2.69dcd114.chunk.js": "/Gradiation_Project/static/js/2.69dcd114.chunk.js",
+    "static/js/2.69dcd114.chunk.js.map": "/Gradiation_Project/static/js/2.69dcd114.chunk.js.map",
+    "static/js/3.0de099d4.chunk.js": "/Gradiation_Project/static/js/3.0de099d4.chunk.js",
+    "static/js/3.0de099d4.chunk.js.map": "/Gradiation_Project/static/js/3.0de099d4.chunk.js.map",
+    "index.html": "/Gradiation_Project/index.html",
+    "static/css/2.5871ad3e.chunk.css.map": "/Gradiation_Project/static/css/2.5871ad3e.chunk.css.map",
+    "static/css/main.23793478.chunk.css.map": "/Gradiation_Project/static/css/main.23793478.chunk.css.map",
+    "static/js/2.69dcd114.chunk.js.LICENSE.txt": "/Gradiation_Project/static/js/2.69dcd114.chunk.js.LICENSE.txt",
+    "static/media/LoadingGif.5b5d185a.gif": "/Gradiation_Project/static/media/LoadingGif.5b5d185a.gif"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.3c5e76f8.js",
+    "static/css/2.5871ad3e.chunk.css",
+    "static/js/2.69dcd114.chunk.js",
+    "static/css/main.23793478.chunk.css",
+    "static/js/main.ac3eb82c.chunk.js"
+  ]
+}
