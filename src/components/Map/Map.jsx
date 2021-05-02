@@ -1,6 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './Map.css';
 import Loading from '../Loading/Loading.jsx';
+import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
+import '../StartRide/StartRide.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import {
   GoogleMap,
   useLoadScript,
@@ -42,19 +46,19 @@ const cordinateList = [
   {
     lat: 43.14506241157973,
     lng: -80.31427730859374,
-    time: new Date(),
+    time: new Date(86400000 + 1),
     info: '2 cıkıstaki ısıklara dikkat et',
   },
   {
     lat: 43.321157725277914,
     lng: -80.75373043359374,
-    time: new Date(),
+    time: new Date(86400000 + 2),
     info: '1. cıkıs sıkıntılı biraz',
   },
   {
     lat: 42.92422789558916,
     lng: -80.96796383203124,
-    time: new Date(),
+    time: new Date(86400000 + 3),
     info: 'görkem araba sürüyo dikkat et.',
   },
 ];
@@ -69,8 +73,14 @@ const Map = () => {
   const [markers, setMarkers] = React.useState([]);
   const [selected, setSelected] = React.useState(null);
   const [infoText, setInfoText] = React.useState('');
+  // Hooks
+  const [startRide, setStartRide] = useState(true);
 
   // development
+
+  const closeRideComponent = () => {
+    setStartRide(false);
+  };
 
   const calculateMiddlePoint = (lat1, lng1, lat2, lng2) => {};
 
@@ -83,7 +93,7 @@ const Map = () => {
   //------------------------
 
   const onMapClick = React.useCallback((event) => {
-    onDataLoadShowMarker(cordinateList);
+    //onDataLoadShowMarker(cordinateList);
     setMarkers((current) => [
       ...current,
       {
@@ -93,7 +103,6 @@ const Map = () => {
         info: 'Zeynep Ehliyet almış \n dikkat et dostum !!!!',
       },
     ]);
-    console.log('markers', markers);
   }, []);
 
   const onInfoClick = React.useCallback((event) => {
@@ -103,6 +112,7 @@ const Map = () => {
   const mapRef = React.useRef();
   const onMapLoad = React.useCallback((map) => {
     mapRef.current = map;
+    onDataLoadShowMarker(cordinateList);
   }, []);
 
   const panTo = React.useCallback(({ lat, lng }) => {
@@ -115,8 +125,61 @@ const Map = () => {
 
   return (
     <div>
-      <Locate panTo={panTo} />
-      <Search panTo={panTo} />
+      {startRide ? (
+        <Card
+          className="card"
+          style={{
+            opacity: 0.85,
+            borderColor: '#603bbb !important',
+            position: 'absolute',
+            left: '50%',
+            top: '50%',
+            transform: 'translate(-50%, -50%)',
+            zIndex: '1',
+            border: 'solid 5px #603bbb',
+          }}
+        >
+          <Card.Header>
+            <h1>Start Ride</h1>
+          </Card.Header>
+          <Card.Body className="m2">
+            <Form.Group controlId="formBasicEmail">
+              <Form.Label>Choose a starting location.</Form.Label>
+
+              <Row>
+                <Col sm={10}>
+                  <Search panTo={panTo} />
+                </Col>
+                <Col sm={2} style={{ padding: '0px' }}>
+                  <Locate panTo={panTo} />
+                </Col>
+              </Row>
+
+              <Form.Text className="text-muted">
+                Choose your starting location for driving
+              </Form.Text>
+            </Form.Group>
+            <Form.Group controlId="formBasicEmail">
+              <Form.Label>Choose destination location</Form.Label>
+              <Search style={{ margin: '20px', top: '3rem' }} />
+              <Form.Text className="text-muted">
+                Choose your destination for driving{' '}
+              </Form.Text>
+            </Form.Group>
+            <Button
+              variant="primary"
+              style={{ backgroundColor: '#603bbb', borderColor: '#603bbb' }}
+              type="submit"
+              size="lg"
+              block
+            >
+              Submit
+            </Button>
+          </Card.Body>
+        </Card>
+      ) : (
+        false
+      )}
 
       <GoogleMap
         mapContainerStyle={mapContainerStyle}
@@ -129,6 +192,7 @@ const Map = () => {
         {markers.map((marker) => (
           <Marker
             key={marker.time.toISOString()}
+            animation={window.google.maps.Animation.DROP}
             position={{ lat: marker.lat, lng: marker.lng }}
             icon={{
               url: '/danger_icon.png',
@@ -200,6 +264,7 @@ function Search({ panTo }) {
   return (
     <div className="search">
       <Combobox
+        style={{ zIndex: 2 }}
         onSelect={async (address) => {
           setValue(address, false);
           clearSuggestions();
@@ -215,6 +280,7 @@ function Search({ panTo }) {
         }}
       >
         <ComboboxInput
+          style={{ zIndex: 2 }}
           value={value}
           onChange={(e) => {
             setValue(e.target.value);
@@ -222,8 +288,8 @@ function Search({ panTo }) {
           disabled={!ready}
           placeholder="Enter an Adress"
         />
-        <ComboboxPopover>
-          <ComboboxList>
+        <ComboboxPopover style={{ zIndex: 2 }}>
+          <ComboboxList style={{ zIndex: 2 }}>
             {status === 'OK' &&
               data.map(({ id, description }) => (
                 <ComboboxOption key={id} value={description} />
