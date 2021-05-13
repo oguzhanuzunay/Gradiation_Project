@@ -1,29 +1,30 @@
 .search {
-  position: absolute;
-  top: 1rem;
-  left: 50%;
-  transform: translateX(-50%);
   width: 100%;
-  max-width: 400px;
   z-index: 10;
+  left: 0px;
 }
 
 .search input {
   padding: 0.5rem;
   font-size: 1.5rem;
+  opacity: 1;
   width: 100%;
+  border-color: #603bbb;
 }
 
 .locate {
-  position: absolute;
-  top: 7rem;
-  right: 3rem;
+  position: relative;
   background: none;
   border: none;
   z-index: 10;
 }
 .locate img {
-  width: 75px;
+  width: 48px;
   cursor: pointer;
-  right: 0px;
+  right: 50px;
+}
+
+h1 {
+  color: #603bbb;
+  opacity: 1;
 }
