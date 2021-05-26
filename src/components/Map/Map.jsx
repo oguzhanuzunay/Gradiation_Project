@@ -105,6 +105,8 @@ const Map = () => {
 
   // setMarkers((current) => [...current, cordinateList]);
   //console.log(cordinateList);
+
+  // Kazaları Yükle
   const onDataLoadShowMarker = React.useCallback((list) => {
     setMarkers((current) => [...current].concat(list));
   }, []);
@@ -124,6 +126,33 @@ const Map = () => {
     ]);
   }, []);
 
+  const onPositionSellect = React.useCallback((lat, lng, url, type) => {
+    setMarkers((current) => [
+      ...current,
+      {
+        lat: lat,
+        lng: lng,
+        time: new Date(),
+        info: `${type} Point`,
+        url: url || '/marker-green.png',
+        type: type,
+      },
+    ]);
+    console.log(type, lat, lng);
+  }, []);
+
+  const onFinishSelect = React.useCallback((lat, lng, url, type) => {
+    onPositionSellect(lat, lng, url, type);
+    console.log(lat, lng, url, type);
+  }, []);
+
+  const clearOldPoint = (type) => {
+    console.log(markers.map((mark) => mark.type));
+    let newMarkers = markers.filter((mark) => mark.type !== type);
+    console.log(newMarkers);
+    setMarkers(() => [...newMarkers]);
+  };
+
   const onInfoClick = React.useCallback((event) => {
     console.log('Info :', infoText);
   }, []);
@@ -134,12 +163,13 @@ const Map = () => {
     onDataLoadShowMarker(cordinateList);
   }, []);
 
-  const panTo = React.useCallback(({ lat, lng }) => {
+  const panTo = React.useCallback(({ lat, lng, zoom }) => {
     mapRef.current.panTo({ lat, lng });
-    mapRef.current.setZoom(10);
+    mapRef.current.setZoom(zoom || 10);
   });
 
   const zoomControl = React.useCallback((km) => {
+    //  156543.03392 * Math.cos(km * Math.PI / 180) / Math.pow(2, zoom)
     /*
 20 : 1128.497220
 19 : 2256.994440
@@ -161,15 +191,15 @@ const Map = () => {
 3  : 147914387.600000
 2  : 295828775.300000
 1  : 591657550.500000
-*/
+//-------------------------------
     km = km * 1128;
     console.log(km);
     let distance = (591657550 - km) / 6027500;
-    console.log(distance/2);
+    console.log(distance / 2);
     let zoom = Math.pow(distance, 1 / 2);
-
-    console.log(zoom);
-    mapRef.current.setZoom(zoom);
+ */
+    //  return zoom;
+    // mapRef.current.setZoom(zoom);
   });
 
   /*
@@ -223,6 +253,8 @@ const Map = () => {
                       type={'startPoint'}
                       setCordinate1={setCordinate1}
                       setCordinate2={setCordinate2}
+                      onPositionSellect={onPositionSellect}
+                      clearOldPoint={clearOldPoint}
                     />
                   </Col>
                   <Col sm={2} style={{ padding: '0px' }}>
@@ -242,6 +274,9 @@ const Map = () => {
                   panTo={panTo}
                   setCordinate1={setCordinate1}
                   setCordinate2={setCordinate2}
+                  onFinishSelect={onFinishSelect}
+                  clearOldPoint={clearOldPoint}
+
                   /*
                   getCordinateX={getCordinateX}
                   getCordinateY={getCordinateY}
@@ -262,10 +297,11 @@ const Map = () => {
                   panTo({
                     lat: calculateMiddlePoint(cordinate1, cordinate2)[0],
                     lng: calculateMiddlePoint(cordinate1, cordinate2)[1],
+                    zoom: 5,
+                    // zoom: zoomControl(
+                    //   calculateDistanceWithEuclidean(cordinate1, cordinate2)
+                    // ),
                   });
-                  zoomControl(
-                    calculateDistanceWithEuclidean(cordinate1, cordinate2)
-                  );
                 }}
               >
                 Submit
@@ -291,7 +327,7 @@ const Map = () => {
             animation={window.google.maps.Animation.DROP}
             position={{ lat: marker.lat, lng: marker.lng }}
             icon={{
-              url: '/danger_icon.png',
+              url: marker.url || '/danger_icon.png',
               scaledSize: new window.google.maps.Size(30, 30),
               origin: new window.google.maps.Point(0, 0),
               anchor: new window.google.maps.Point(15, 15),
@@ -347,7 +383,15 @@ function Locate({ panTo, setCordinate1 }) {
   );
 }
 
-function Search({ panTo, setCordinate1, setCordinate2, type }) {
+function Search({
+  panTo,
+  setCordinate1,
+  setCordinate2,
+  type,
+  onPositionSellect,
+  onFinishSelect,
+  clearOldPoint,
+}) {
   const {
     ready,
     value,
@@ -372,9 +416,13 @@ function Search({ panTo, setCordinate1, setCordinate2, type }) {
             const result = await getGeocode({ address });
             const { lat, lng } = await getLatLng(result[0]);
             if (type === 'startPoint') {
+              clearOldPoint('start');
               setCordinate1({ x: lat, y: lng });
+              onPositionSellect(lat, lng, '/marker-green.png', 'start');
             } else {
+              clearOldPoint('finish');
               setCordinate2({ x: lat, y: lng });
+              onFinishSelect(lat, lng, '/marker-red.png', 'finish');
             }
             panTo({ lat, lng });
             //  console.log(lat, lng);
