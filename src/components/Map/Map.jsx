@@ -9,6 +9,7 @@ import Draggable from 'react-draggable';
 import {
   GoogleMap,
   useLoadScript,
+  DirectionsService,
   Marker,
   InfoWindow,
 } from '@react-google-maps/api';
@@ -64,10 +65,10 @@ const cordinateList = [
   },
 ];
 
-const Map = () => {
+const Map = ({ startRide, closeRide }) => {
   const { isLoaded, loadError } = useLoadScript({
     //googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-    googleMapsApiKey: 'AIzaSyAIvSdAGkHEJ3kkOUJWUfHss2SE3jVxMmI',
+    googleMapsApiKey: 'AIzaSyAfnXHBS80WU5DFMjNhQu9Zb42EdV_41qQ',
     libraries,
   });
 
@@ -75,15 +76,11 @@ const Map = () => {
   const [selected, setSelected] = React.useState(null);
   const [infoText, setInfoText] = React.useState('');
   // Hooks
-  const [startRide, setStartRide] = useState(true);
+
   const [cordinate1, setCordinate1] = useState({ x: 0, y: 0 });
   const [cordinate2, setCordinate2] = useState({ x: 0, y: 0 });
 
   // development
-
-  const closeRideComponent = () => {
-    setStartRide(false);
-  };
 
   const calculateDistanceWithEuclidean = (cord1, cord2) => {
     let distance = Math.hypot(cord1.x - cord2.x, cord1.y - cord2.y);
@@ -232,15 +229,36 @@ const Map = () => {
               opacity: 0.85,
               borderColor: '#603bbb !important',
               position: 'absolute',
-              left: '50%',
-              top: '50%',
+              left: '40%',
+              top: '30%',
               transform: 'translate(-50%, -50%)',
               zIndex: '1',
               border: 'solid 5px #603bbb',
             }}
           >
-            <Card.Header>
+            <Card.Header
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}
+            >
               <h1>Start Ride</h1>
+              <button
+                style={{
+                  color: '#603bbb',
+                  border: '0',
+                  backgroundColor: 'rgba(255,0,0,0)',
+                  height: '20px',
+                  right: '12px',
+                  top: '0px',
+                  padding: '0px',
+                  fontWeight: '900',
+                }}
+                onClick={() => closeRide()}
+              >
+                X
+              </button>
             </Card.Header>
             <Card.Body className="m2">
               <Form.Group controlId="formBasicEmail">
@@ -258,7 +276,12 @@ const Map = () => {
                     />
                   </Col>
                   <Col sm={2} style={{ padding: '0px' }}>
-                    <Locate panTo={panTo} setCordinate1={setCordinate1} />
+                    <Locate
+                      panTo={panTo}
+                      setCordinate1={setCordinate1}
+                      onPositionSellect={onPositionSellect}
+                      clearOldPoint={clearOldPoint}
+                    />
                   </Col>
                 </Row>
 
@@ -358,11 +381,13 @@ const Map = () => {
   );
 };
 
-function Locate({ panTo, setCordinate1 }) {
+function Locate({ panTo, setCordinate1, onPositionSellect, clearOldPoint }) {
   return (
     <button
       className="locate"
       onClick={() => {
+        clearOldPoint('start');
+
         navigator.geolocation.getCurrentPosition(
           (position) => {
             panTo({
@@ -373,6 +398,12 @@ function Locate({ panTo, setCordinate1 }) {
               x: position.coords.latitude,
               y: position.coords.longitude,
             });
+            onPositionSellect(
+              position.coords.latitude,
+              position.coords.longitude,
+              '/marker-green.png',
+              'start'
+            );
           },
           () => null
         );
