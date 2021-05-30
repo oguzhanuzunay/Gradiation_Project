@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Loading from '../../Loading/Loading.jsx';
 import Map from '../../Map/Map';
 import './Hero.css';
 
 const Hero = ({ handleLogOut }) => {
+  const [startRide, setStartRide] = useState(true);
+
+  let closeRide = () => {
+    setStartRide(false);
+  };
+
   return (
     <>
       <section className="hero">
@@ -11,6 +17,9 @@ const Hero = ({ handleLogOut }) => {
           <div className="cont">
             <h2>Welcome</h2>
             <button className="purpleButton">Map</button>
+            <button className="purpleButton" onClick={() => setStartRide(true)}>
+              Start
+            </button>
           </div>
           <div className="cont right">
             <button className="purpleButton" onClick={handleLogOut}>
@@ -18,7 +27,7 @@ const Hero = ({ handleLogOut }) => {
             </button>
           </div>
         </nav>
-        <Map />
+        <Map startRide={startRide} closeRide={closeRide} />
       </section>
     </>
   );

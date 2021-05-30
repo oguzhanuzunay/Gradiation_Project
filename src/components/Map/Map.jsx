@@ -11,6 +11,8 @@ import {
   useLoadScript,
   Marker,
   InfoWindow,
+  DirectionsRenderer,
+  DirectionsService,
 } from '@react-google-maps/api';
 import MapStyles from './Map.styles';
 import usePlacesAutocomplete, {
@@ -64,10 +66,10 @@ const cordinateList = [
   },
 ];
 
-const Map = () => {
+const Map = ({ startRide, closeRide }) => {
   const { isLoaded, loadError } = useLoadScript({
     //googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-    googleMapsApiKey: 'AIzaSyAIvSdAGkHEJ3kkOUJWUfHss2SE3jVxMmI',
+    googleMapsApiKey: 'AIzaSyAfnXHBS80WU5DFMjNhQu9Zb42EdV_41qQ',
     libraries,
   });
 
@@ -75,14 +77,31 @@ const Map = () => {
   const [selected, setSelected] = React.useState(null);
   const [infoText, setInfoText] = React.useState('');
   // Hooks
-  const [startRide, setStartRide] = useState(true);
+
   const [cordinate1, setCordinate1] = useState({ x: 0, y: 0 });
   const [cordinate2, setCordinate2] = useState({ x: 0, y: 0 });
 
+  //Direction
+  const [destination, setDestination] = useState('');
+  const [origin, setOrigin] = useState('');
+  const [response, setResponse] = useState(null);
+
   // development
 
-  const closeRideComponent = () => {
-    setStartRide(false);
+  const clearAllPoint = React.useCallback(() => {
+    setMarkers(() => []);
+  }, []);
+
+  let directionsCallback = (response) => {
+    console.log(response);
+
+    if (response !== null) {
+      if (response.status === 'OK') {
+        setResponse(response);
+      } else {
+        console.log('response: ', response);
+      }
+    }
   };
 
   const calculateDistanceWithEuclidean = (cord1, cord2) => {
@@ -168,57 +187,6 @@ const Map = () => {
     mapRef.current.setZoom(zoom || 10);
   });
 
-  const zoomControl = React.useCallback((km) => {
-    //  156543.03392 * Math.cos(km * Math.PI / 180) / Math.pow(2, zoom)
-    /*
-20 : 1128.497220
-19 : 2256.994440
-18 : 4513.988880
-17 : 9027.977761
-16 : 18055.955520
-15 : 36111.911040
-14 : 72223.822090
-13 : 144447.644200
-12 : 288895.288400
-11 : 577790.576700
-10 : 1155581.153000
-9  : 2311162.307000
-8  : 4622324.614000
-7  : 9244649.227000
-6  : 18489298.450000
-5  : 36978596.910000
-4  : 73957193.820000
-3  : 147914387.600000
-2  : 295828775.300000
-1  : 591657550.500000
-//-------------------------------
-    km = km * 1128;
-    console.log(km);
-    let distance = (591657550 - km) / 6027500;
-    console.log(distance / 2);
-    let zoom = Math.pow(distance, 1 / 2);
- */
-    //  return zoom;
-    // mapRef.current.setZoom(zoom);
-  });
-
-  /*
-  const getCordinateX = async (result) => {
-    const { lat, lng } = await getLatLng(result[0]);
-    console.log('X', lat);
-    return lat;
-  };
-  const getCordinateY = async (result) => {
-    const { lat, lng } = await getLatLng(result[0]);
-    console.log('Y', lng);
-    return lng;
-  };
-  */
-
-  const updateCord1 = (x, y) => {
-    setCordinate1();
-  };
-
   if (loadError) return 'Error loading Maps';
   if (!isLoaded) return <Loading />;
 
@@ -239,8 +207,29 @@ const Map = () => {
               border: 'solid 5px #603bbb',
             }}
           >
-            <Card.Header>
+            <Card.Header
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}
+            >
               <h1>Start Ride</h1>
+              <button
+                style={{
+                  color: '#603bbb',
+                  border: '0',
+                  backgroundColor: 'rgba(255,0,0,0)',
+                  height: '20px',
+                  right: '12px',
+                  top: '0px',
+                  padding: '0px',
+                  fontWeight: '900',
+                }}
+                onClick={() => closeRide()}
+              >
+                X
+              </button>
             </Card.Header>
             <Card.Body className="m2">
               <Form.Group controlId="formBasicEmail">
@@ -258,7 +247,12 @@ const Map = () => {
                     />
                   </Col>
                   <Col sm={2} style={{ padding: '0px' }}>
-                    <Locate panTo={panTo} setCordinate1={setCordinate1} />
+                    <Locate
+                      panTo={panTo}
+                      setCordinate1={setCordinate1}
+                      clearOldPoint={clearOldPoint}
+                      onPositionSellect={onPositionSellect}
+                    />
                   </Col>
                 </Row>
 
@@ -287,20 +281,23 @@ const Map = () => {
                 </Form.Text>
               </Form.Group>
               <Button
+                clearAllPoint={clearAllPoint}
                 variant="primary"
                 style={{ backgroundColor: '#603bbb', borderColor: '#603bbb' }}
                 type="submit"
                 size="lg"
                 type="calculateDistance"
                 block
+                clearOldPoint={clearOldPoint}
                 onClick={() => {
-                  panTo({
-                    lat: calculateMiddlePoint(cordinate1, cordinate2)[0],
-                    lng: calculateMiddlePoint(cordinate1, cordinate2)[1],
-                    zoom: 5,
-                    // zoom: zoomControl(
-                    //   calculateDistanceWithEuclidean(cordinate1, cordinate2)
-                    // ),
+                  clearAllPoint();
+                  setOrigin({
+                    lat: parseFloat(cordinate1.x),
+                    lng: parseFloat(cordinate1.y),
+                  });
+                  setDestination({
+                    lat: parseFloat(cordinate2.x),
+                    lng: parseFloat(cordinate2.y),
                   });
                 }}
               >
@@ -353,25 +350,82 @@ const Map = () => {
             </div>
           </InfoWindow>
         ) : null}
+
+        {
+          // Direction on Maps
+          destination !== '' && origin !== '' && (
+            <DirectionsService
+              // required
+              options={{
+                destination: destination,
+                origin: origin,
+                travelMode: 'DRIVING',
+              }}
+              // required
+              callback={directionsCallback}
+              // optional
+              onLoad={(directionsService) => {
+                console.log(
+                  'DirectionsService onLoad directionsService: ',
+                  directionsService
+                );
+              }}
+              // optional
+              onUnmount={(directionsService) => {
+                console.log(
+                  'DirectionsService onUnmount directionsService: ',
+                  directionsService
+                );
+              }}
+            />
+          )
+        }
+
+        {response !== null && (
+          <DirectionsRenderer
+            // required
+            options={{
+              directions: response,
+            }}
+            // optional
+            onLoad={(directionsRenderer) => {
+              console.log(
+                'DirectionsRenderer onLoad directionsRenderer: ',
+                directionsRenderer
+              );
+            }}
+            // optional
+            onUnmount={(directionsRenderer) => {
+              console.log(
+                'DirectionsRenderer onUnmount directionsRenderer: ',
+                directionsRenderer
+              );
+            }}
+          />
+        )}
       </GoogleMap>
     </div>
   );
 };
 
-function Locate({ panTo, setCordinate1 }) {
+function Locate({ panTo, setCordinate1, clearOldPoint, onPositionSellect }) {
   return (
     <button
       className="locate"
       onClick={() => {
         navigator.geolocation.getCurrentPosition(
           (position) => {
+            let lat = position.coords.latitude;
+            let lng = position.coords.longitude;
+            clearOldPoint('start');
+            onPositionSellect(lat, lng, '/marker-green.png', 'start');
             panTo({
-              lat: position.coords.latitude,
-              lng: position.coords.longitude,
+              lat,
+              lng,
             });
             setCordinate1({
-              x: position.coords.latitude,
-              y: position.coords.longitude,
+              x: lat,
+              y: lng,
             });
           },
           () => null
