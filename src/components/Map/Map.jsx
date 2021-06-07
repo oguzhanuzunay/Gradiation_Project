@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './Map.css';
 import Loading from '../Loading/Loading.jsx';
-import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
+import { Button, Card, Col, Form, Row } from 'react-bootstrap';
 import '../StartRide/StartRide.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Draggable from 'react-draggable';
@@ -66,7 +66,7 @@ const cordinateList = [
   },
 ];
 var limit = 0;
-const Map = ({ startRide, closeRide }) => {
+const Map = ({ startRide, closeRide, setResponse, response }) => {
   const { isLoaded, loadError } = useLoadScript({
     //googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     googleMapsApiKey: 'AIzaSyAfnXHBS80WU5DFMjNhQu9Zb42EdV_41qQ',
@@ -84,9 +84,7 @@ const Map = ({ startRide, closeRide }) => {
   //Direction
   const [destination, setDestination] = useState('');
   const [origin, setOrigin] = useState('');
-  const [response, setResponse] = useState(null);
 
-  const [closeModal, setCloseModal] = useState(false);
   // development
   const clearAllPoint = React.useCallback(() => {
     setMarkers(() => []);
@@ -245,6 +243,8 @@ const Map = ({ startRide, closeRide }) => {
                       setCordinate2={setCordinate2}
                       onPositionSellect={onPositionSellect}
                       clearOldPoint={clearOldPoint}
+                      setOrigin={setOrigin}
+                      setDestination={setDestination}
                     />
                   </Col>
                   <Col sm={2} style={{ padding: '0px' }}>
@@ -253,6 +253,8 @@ const Map = ({ startRide, closeRide }) => {
                       setCordinate1={setCordinate1}
                       clearOldPoint={clearOldPoint}
                       onPositionSellect={onPositionSellect}
+                      setOrigin={setOrigin}
+                      setDestination={setDestination}
                     />
                   </Col>
                 </Row>
@@ -271,7 +273,8 @@ const Map = ({ startRide, closeRide }) => {
                   setCordinate2={setCordinate2}
                   onFinishSelect={onFinishSelect}
                   clearOldPoint={clearOldPoint}
-
+                  setOrigin={setOrigin}
+                  setDestination={setDestination}
                   /*
                   getCordinateX={getCordinateX}
                   getCordinateY={getCordinateY}
@@ -291,7 +294,7 @@ const Map = ({ startRide, closeRide }) => {
                 block
                 clearOldPoint={clearOldPoint}
                 onClick={() => {
-                  // closeRide(true);
+                  closeRide(true);
                   clearAllPoint();
                   setOrigin({
                     lat: parseFloat(cordinate1.x),
@@ -447,6 +450,8 @@ function Search({
   onPositionSellect,
   onFinishSelect,
   clearOldPoint,
+  setOrigin,
+  setDestination,
 }) {
   const {
     ready,
@@ -466,6 +471,9 @@ function Search({
       <Combobox
         style={{ zIndex: 2 }}
         onSelect={async (address) => {
+          setOrigin('');
+          setDestination('');
+          limit = 0;
           setValue(address, false);
           clearSuggestions();
           try {
@@ -481,8 +489,6 @@ function Search({
               onFinishSelect(lat, lng, '/marker-red.png', 'finish');
             }
             panTo({ lat, lng });
-            //  console.log(lat, lng);
-            // console.log(result[0]);
           } catch (error) {
             console.log(error);
           }

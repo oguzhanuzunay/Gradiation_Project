@@ -5,6 +5,7 @@ import './Hero.css';
 
 const Hero = ({ handleLogOut }) => {
   const [startRide, setStartRide] = useState(true);
+  const [response, setResponse] = useState(null);
 
   let closeRide = () => {
     setStartRide(false);
@@ -17,7 +18,13 @@ const Hero = ({ handleLogOut }) => {
           <div className="cont">
             <h2>Welcome</h2>
             <button className="purpleButton">Map</button>
-            <button className="purpleButton" onClick={() => setStartRide(true)}>
+            <button
+              className="purpleButton"
+              onClick={() => {
+                setStartRide(true);
+               // setResponse(null);
+              }}
+            >
               Start
             </button>
           </div>
@@ -27,7 +34,13 @@ const Hero = ({ handleLogOut }) => {
             </button>
           </div>
         </nav>
-        <Map startRide={startRide} closeRide={closeRide} setStartRide={setStartRide}/>
+        <Map
+          startRide={startRide}
+          closeRide={closeRide}
+          setStartRide={setStartRide}
+          response={response}
+          setResponse={setResponse}
+        />
       </section>
     </>
   );
