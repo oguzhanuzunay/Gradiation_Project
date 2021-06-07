@@ -27,7 +27,7 @@ const Hero = ({ handleLogOut }) => {
             </button>
           </div>
         </nav>
-        <Map startRide={startRide} closeRide={closeRide} />
+        <Map startRide={startRide} closeRide={closeRide} setStartRide={setStartRide}/>
       </section>
     </>
   );

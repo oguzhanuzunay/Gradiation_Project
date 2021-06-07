@@ -65,7 +65,7 @@ const cordinateList = [
     info: 'görkem araba sürüyo dikkat et.',
   },
 ];
-
+var limit = 0;
 const Map = ({ startRide, closeRide }) => {
   const { isLoaded, loadError } = useLoadScript({
     //googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -86,16 +86,17 @@ const Map = ({ startRide, closeRide }) => {
   const [origin, setOrigin] = useState('');
   const [response, setResponse] = useState(null);
 
+  const [closeModal, setCloseModal] = useState(false);
   // development
-
   const clearAllPoint = React.useCallback(() => {
     setMarkers(() => []);
   }, []);
 
   let directionsCallback = (response) => {
     console.log(response);
-
-    if (response !== null) {
+    if (response !== null && limit < 2) {
+      limit = limit + 1;
+      console.log(limit);
       if (response.status === 'OK') {
         setResponse(response);
       } else {
@@ -290,6 +291,7 @@ const Map = ({ startRide, closeRide }) => {
                 block
                 clearOldPoint={clearOldPoint}
                 onClick={() => {
+                  // closeRide(true);
                   clearAllPoint();
                   setOrigin({
                     lat: parseFloat(cordinate1.x),
@@ -350,7 +352,7 @@ const Map = ({ startRide, closeRide }) => {
             </div>
           </InfoWindow>
         ) : null}
-
+        {console.log(startRide)}
         {
           // Direction on Maps
           destination !== '' && origin !== '' && (

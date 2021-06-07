@@ -1,16 +1,10 @@
 import React from 'react';
 import loadingImage from './LoadingGif.gif';
+import './loading.css';
 
 const Loading = () => {
   return (
-    <div
-      style={{
-        width: '100%',
-        height: 0,
-        paddingBottom: '%50',
-        position: 'relative',
-      }}
-    >
+    <div style={{}} className="loadingContainer">
       <img src={loadingImage} style={{ marginTop: '50px' }} />
     </div>
   );
