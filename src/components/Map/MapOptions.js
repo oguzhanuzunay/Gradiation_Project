@@ -1,6 +1,5 @@
 import MapStyles from './Map.styles';
 
-
 export const libraries = ['places'];
 export const mapContainerStyle = {
   width: '100%',
@@ -15,24 +14,37 @@ export const options = {
   disableDefaultUI: true,
   zoomControl: true,
 };
+export const circleOptions = {
+  strokeColor: '#FF0000',
+  strokeOpacity: 0.8,
+  strokeWeight: 2,
+  fillColor: '#FF0000',
+  fillOpacity: 0.1,
+  clickable: false,
+  draggable: false,
+  editable: false,
+  visible: false,
+  radius: 0,
+  zIndex: 1,
+};
 
 export const cordinateList = [
   {
     lat: 43.14506241157973,
     lng: -80.31427730859374,
     time: new Date(86400000 + 1),
-    info: '2 cıkıstaki ısıklara dikkat et',
+    info: 'Accident on Tanner Rd at Pennbrooke Ln.',
   },
   {
     lat: 43.321157725277914,
     lng: -80.75373043359374,
     time: new Date(86400000 + 2),
-    info: '1. cıkıs sıkıntılı biraz',
+    info: 'Accident on Houston Branch Rd at Providence Branch Ln.',
   },
   {
     lat: 42.92422789558916,
     lng: -80.96796383203124,
     time: new Date(86400000 + 3),
-    info: 'görkem araba sürüyo dikkat et.',
+    info: 'Accident on I-595 Westbound at Exit 4 / Pine Island Rd.',
   },
 ];

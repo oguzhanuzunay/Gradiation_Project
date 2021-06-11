@@ -11,6 +11,7 @@ import {
   InfoWindow,
   DirectionsRenderer,
   DirectionsService,
+  Circle,
 } from '@react-google-maps/api';
 
 import {
@@ -19,7 +20,12 @@ import {
   center,
   options,
   cordinateList,
+  circleOptions,
 } from './MapOptions';
+
+const changeRadius = (radius) => {
+  circleOptions.radius = radius;
+};
 
 const Map = ({ startRide, closeRide, setResponse, response }) => {
   const { isLoaded, loadError } = useLoadScript({
@@ -29,6 +35,8 @@ const Map = ({ startRide, closeRide, setResponse, response }) => {
   });
 
   const [markers, setMarkers] = React.useState([]);
+  const [circleRender, setCircleRender] = useState(false);
+  const [circleCenter, setCircleCenter] = useState({});
   const [selected, setSelected] = React.useState(null);
   const [infoText, setInfoText] = React.useState('');
   // Hooks
@@ -59,43 +67,19 @@ const Map = ({ startRide, closeRide, setResponse, response }) => {
     }
   };
 
-  // -------------------------------------------------------------------------------waiting for backend
-  // const calculateDistanceWithEuclidean = (cord1, cord2) => {
-  //   let distance = Math.hypot(cord1.x - cord2.x, cord1.y - cord2.y);
-  //   console.log('distance :', distance * 100);
-  //   let zoomLevel = 4;
-  //   return distance;
-  // };
-
-  // const calculateMiddlePoint = (cord1, cord2) => {
-  //   let distanceX = cord1.x + cord2.x;
-  //   let distanceY = cord1.y + cord2.y;
-
-  //   let middlePointX = distanceX / 2;
-  //   let middlePointY = distanceY / 2;
-  //   console.log(`Orta Nokta \nX: ${middlePointX} \nY: ${middlePointY}`);
-  //   calculateDistanceWithEuclidean(cord1, cord2);
-  //   return [middlePointX, middlePointY];
-  // };
-
-  // setMarkers((current) => [...current, cordinateList]);
-  //console.log(cordinateList);
-  //--------------------------------------------------------------------------------waiting for backend
-
-  //------------------------
 
   //----Add to Maker When Click to Map
-  // const onMapClick = React.useCallback((event) => {
-  //   setMarkers((current) => [
-  //     ...current,
-  //     {
-  //       lat: event.latLng.lat(),
-  //       lng: event.latLng.lng(),
-  //       time: new Date(),
-  //       info: 'Zeynep Ehliyet almış \n dikkat et dostum !!!!',
-  //     },
-  //   ]);
-  // }, []);
+  const onMapClick = React.useCallback((event) => {
+    setMarkers((current) => [
+      ...current,
+      {
+        lat: event.latLng.lat(),
+        lng: event.latLng.lng(),
+        time: new Date(),
+        info: 'Zeynep Ehliyet almış \n dikkat et dostum !!!!',
+      },
+    ]);
+  }, []);
 
   // Load Traffic Accident
   const onDataLoadShowMarker = React.useCallback((list) => {
@@ -146,6 +130,7 @@ const Map = ({ startRide, closeRide, setResponse, response }) => {
     <div>
       {startRide ? (
         <RideCard
+          onDataLoadShowMarker={onDataLoadShowMarker}
           closeRide={closeRide}
           panTo={panTo}
           setCordinate1={setCordinate1}
@@ -159,6 +144,9 @@ const Map = ({ startRide, closeRide, setResponse, response }) => {
           clearAllPoint={clearAllPoint}
           cordinate1={cordinate1}
           cordinate2={cordinate2}
+          setCircleRender={setCircleRender}
+          setCircleCenter={setCircleCenter}
+          changeRadius={changeRadius}
         />
       ) : (
         false
@@ -169,7 +157,7 @@ const Map = ({ startRide, closeRide, setResponse, response }) => {
         zoom={8}
         center={center}
         options={options}
-        //    onClick={onMapClick}
+        onClick={onMapClick}
         onLoad={onMapLoad}
       >
         {markers.map((marker) => (
@@ -178,8 +166,8 @@ const Map = ({ startRide, closeRide, setResponse, response }) => {
             animation={window.google.maps.Animation.DROP}
             position={{ lat: marker.lat, lng: marker.lng }}
             icon={{
-              url: marker.url || '/danger_icon.png',
-              scaledSize: new window.google.maps.Size(30, 30),
+              url: marker.url || '/crash.png',
+              scaledSize: new window.google.maps.Size(32, 32),
               origin: new window.google.maps.Point(0, 0),
               anchor: new window.google.maps.Point(15, 15),
             }}
@@ -254,6 +242,10 @@ const Map = ({ startRide, closeRide, setResponse, response }) => {
               );
             }}
           />
+        )}
+
+        {circleRender && (
+          <Circle center={circleCenter} options={circleOptions} />
         )}
       </GoogleMap>
     </div>

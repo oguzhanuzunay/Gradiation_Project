@@ -3,6 +3,7 @@ import Map from '../../Map/Map';
 import './Hero.css';
 
 const Hero = ({ handleLogOut }) => {
+  
   const [startRide, setStartRide] = useState(true);
   const [response, setResponse] = useState(null);
 
@@ -10,6 +11,7 @@ const Hero = ({ handleLogOut }) => {
     setStartRide(false);
   };
 
+//The part where the page is rendered.
   return (
     <>
       <section className="hero">

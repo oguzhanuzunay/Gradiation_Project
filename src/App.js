@@ -14,16 +14,19 @@ const App = () => {
   const [passwordError, setPasswordError] = useState('');
   const [hasAccount, setHasAccount] = useState(false);
 
+  //Clears inputs when switching between Sign in and Sign up pages. 
   const clearInputs = () => {
     setEmail('');
     setPassword('');
   };
 
+  //Clears errors when click Sign in or Sign up button. 
   const clearErrors = () => {
     setEmailError('');
     setPasswordError('');
   };
 
+  // Checks user information from database. If true, it logs in.
   const handleLogin = () => {
     clearErrors();
     fire
@@ -45,6 +48,8 @@ const App = () => {
       });
   };
 
+  // The function that the user uses when registering with the application. 
+  // If the email and password format is correct, it adds the user to the database.
   const handleSignUp = () => {
     clearErrors();
     fire
@@ -64,11 +69,16 @@ const App = () => {
         }
       });
   };
-
+  // used when the user logs out of the application.
   const handleLogOut = () => {
     fire.auth().signOut();
   };
 
+
+  // If the user has logged into the application before, it checks it and opens the application directly.
+  // No need to login again.
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const authListener = () => {
     fire.auth().onAuthStateChanged((user) => {
       if (user) {
@@ -83,6 +93,9 @@ const App = () => {
     authListener();
   }, [authListener]);
 
+
+
+  //The part where the page is rendered. If the user (if logged in) exists, the Login page opens. 
   return (
     <div className="App">
       {user ? (
