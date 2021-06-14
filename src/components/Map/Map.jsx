@@ -76,7 +76,7 @@ const Map = ({ startRide, closeRide, setResponse, response }) => {
         lat: event.latLng.lat(),
         lng: event.latLng.lng(),
         time: new Date(),
-        info: 'Zeynep Ehliyet almış \n dikkat et dostum !!!!',
+        info: '',
       },
     ]);
   }, []);

@@ -48,3 +48,27 @@ export const cordinateList = [
     info: 'Accident on I-595 Westbound at Exit 4 / Pine Island Rd.',
   },
 ];
+
+export const infoText = [
+  'At TN-248/Peytonsville Rd/Exit 61 - Accident. Right lane blocked.',
+  'At Magic Mountain Pky - Accident. Hard shoulder blocked.',
+  'Restrictions due to accident on US-92 at Bethlehem Rd.',
+  'At Northwest Hwy/Exit 11 - Accident.',
+  'Accident on Fort Lowell Rd at Avenida del Clarin.',
+  'At I-287/W Oakland Ave - Accident.',
+  'Accident on Westpark Dr at 14th St.',
+  'Accident on CA-2 Southbound at Exit 13 I-5.',
+  'Incident on SIERRA AVE near LYTLE CREEK RD Expect delays.',
+  'Incident on I-94 WB near I-696 Drive with caution.',
+
+  'Lane blocked due to accident on I-285 Eastbound at Exit 29 Ashford Dunwoody Rd.',
+  'Accident on US-401 Main St Northbound at NC-42 NC 55 Hwy.',
+  'Accident on Chimney Rock Rd at US-90 Alt Main St.',
+  'At McLean Ave/Exit 3 - Accident. Left lane blocked.',
+  'Lane blocked due to accident on I-680 Northbound at Exit 53 CA-4.',
+  'Accident on I-26 Eastbound at Exit 213B Montague Ave.',
+  'Accident on Research Blvd Southbound at Pavilion Blvd.',
+  'At CA-22/Garden Grove Fwy - Accident.',
+  'Accident on 17 Mile Rd at Stout Ave.',
+  'Accident on I-90 Eastbound at Exit 48A.',
+];

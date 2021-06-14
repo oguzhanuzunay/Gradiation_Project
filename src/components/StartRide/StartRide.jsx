@@ -7,6 +7,7 @@ import { Button, Card, Col, Form, Row } from 'react-bootstrap';
 import Draggable from 'react-draggable';
 import random from 'random';
 import data from '../Map/Locations.json';
+import { infoText } from '../Map/MapOptions';
 
 const calculateDistanceWithEuclidean = (cord1, cord2) => {
   let distance = Math.hypot(cord1.x - cord2.x, cord1.y - cord2.y);
@@ -41,7 +42,7 @@ const randomGenerator = (startPoint, endPoint) => {
   let arr = [];
 
   let counter = 0;
-  for (let i = 0; i < 30; i++) {
+  for (let i = 0; i < 20; i++) {
     counter++;
 
     if (startPoint.x < endPoint.x) {
@@ -60,7 +61,7 @@ const randomGenerator = (startPoint, endPoint) => {
       lat: x,
       lng: y,
       time: new Date(86400000 + counter),
-      info: 'asd',
+      info: `${infoText[i]}`,
     });
   }
   console.log(arr);
