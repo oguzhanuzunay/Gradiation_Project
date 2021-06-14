@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/Gradiation_Project/static/css/main.bf308790.chunk.css",
-    "main.js": "/Gradiation_Project/static/js/main.a075c9d2.chunk.js",
-    "main.js.map": "/Gradiation_Project/static/js/main.a075c9d2.chunk.js.map",
+    "main.js": "/Gradiation_Project/static/js/main.64bdaa8f.chunk.js",
+    "main.js.map": "/Gradiation_Project/static/js/main.64bdaa8f.chunk.js.map",
     "runtime-main.js": "/Gradiation_Project/static/js/runtime-main.a75c394f.js",
     "runtime-main.js.map": "/Gradiation_Project/static/js/runtime-main.a75c394f.js.map",
     "static/css/2.43328fc1.chunk.css": "/Gradiation_Project/static/css/2.43328fc1.chunk.css",
@@ -21,6 +21,6 @@
     "static/css/2.43328fc1.chunk.css",
     "static/js/2.a7a51237.chunk.js",
     "static/css/main.bf308790.chunk.css",
-    "static/js/main.a075c9d2.chunk.js"
+    "static/js/main.64bdaa8f.chunk.js"
   ]
 }
