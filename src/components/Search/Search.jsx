@@ -1,4 +1,6 @@
 import React from 'react';
+import greenMarker from '../Map/logos/marker-green.png';
+import redMarker from '../Map/logos/marker-red.png';
 
 import usePlacesAutocomplete, {
   getGeocode,
@@ -55,11 +57,11 @@ const Search = ({
             if (type === 'startPoint') {
               clearOldPoint('start');
               setCordinate1({ x: lat, y: lng });
-              onPositionSelect(lat, lng, '/marker-green.png', 'start');
+              onPositionSelect(lat, lng, greenMarker, 'start');
             } else {
               clearOldPoint('finish');
               setCordinate2({ x: lat, y: lng });
-              onFinishSelect(lat, lng, '/marker-red.png', 'finish');
+              onFinishSelect(lat, lng, redMarker, 'finish');
             }
             panTo({ lat, lng });
           } catch (error) {

@@ -4,6 +4,8 @@ import Loading from '../Loading/Loading.jsx';
 import '../StartRide/StartRide.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import RideCard from '../StartRide/StartRide';
+import greenMarker from './logos/marker-green.png';
+import crashLogo from './logos/crash.png';
 import {
   GoogleMap,
   useLoadScript,
@@ -67,7 +69,6 @@ const Map = ({ startRide, closeRide, setResponse, response }) => {
     }
   };
 
-
   //----Add to Maker When Click to Map
   const onMapClick = React.useCallback((event) => {
     setMarkers((current) => [
@@ -94,7 +95,7 @@ const Map = ({ startRide, closeRide, setResponse, response }) => {
         lng: lng,
         time: new Date(),
         info: `${type} Point`,
-        url: url || '/marker-green.png',
+        url: url || greenMarker,
         type: type,
       },
     ]);
@@ -166,7 +167,7 @@ const Map = ({ startRide, closeRide, setResponse, response }) => {
             animation={window.google.maps.Animation.DROP}
             position={{ lat: marker.lat, lng: marker.lng }}
             icon={{
-              url: marker.url || '/crash.png',
+              url: marker.url || crashLogo,
               scaledSize: new window.google.maps.Size(32, 32),
               origin: new window.google.maps.Point(0, 0),
               anchor: new window.google.maps.Point(15, 15),

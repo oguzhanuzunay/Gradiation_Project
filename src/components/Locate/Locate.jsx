@@ -1,4 +1,6 @@
 import React from 'react';
+import greenMarker from '../Map/logos/marker-green.png';
+import compass from '../Map/logos/compass.png';
 
 const Locate = ({ panTo, setCordinate1, clearOldPoint, onPositionSelect }) => {
   return (
@@ -10,7 +12,7 @@ const Locate = ({ panTo, setCordinate1, clearOldPoint, onPositionSelect }) => {
             let lat = position.coords.latitude;
             let lng = position.coords.longitude;
             clearOldPoint('start');
-            onPositionSelect(lat, lng, '/marker-green.png', 'start');
+            onPositionSelect(lat, lng, greenMarker, 'start');
             panTo({
               lat,
               lng,
@@ -24,7 +26,7 @@ const Locate = ({ panTo, setCordinate1, clearOldPoint, onPositionSelect }) => {
         );
       }}
     >
-      <img src="/compass.png" alt="compass - locate me" />
+      <img src={compass} alt="compass - locate me" />
     </button>
   );
 };
